@@ -47,9 +47,9 @@ public class DriveSubsystem extends SubsystemBase {
     }
     
     public void drive(double forward, double rotate) {
-        forward = forward >= Constants.DriveConstants.DEADZONE ? forward : 0;
-        rotate = rotate >= Constants.DriveConstants.DEADZONE ? rotate : 0;
-
+        forward = Math.abs(forward) >= Constants.DriveConstants.DEADZONE ? forward : 0;
+        rotate = Math.abs(rotate) >= Constants.DriveConstants.DEADZONE ? rotate : 0;
+        rotate = rotate * -1;
         backLeftMotor.setPower(Range.clip((forward + rotate), -1, 1) * speedMultiplier);
         backRightMotor.setPower(Range.clip((forward - rotate), -1, 1) * speedMultiplier);
     }
