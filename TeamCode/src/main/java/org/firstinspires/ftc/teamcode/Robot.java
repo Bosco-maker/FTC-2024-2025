@@ -10,8 +10,6 @@ import com.arcrobotics.ftclib.command.RunCommand;
 import org.firstinspires.ftc.teamcode.opmodes.*;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 
-//TODO: Add a button to switch between fieldCentric and RobotCentric
-
 public class Robot {
 
     private final OpMode opMode;
@@ -33,18 +31,15 @@ public class Robot {
         /* Controls:
         * Driver:
         *   Forward -> left y axis
-        *   Strafe -> left x axis
         *   Turn -> right x axis
         *
         *   Reduce Speed -> right trigger
-        *   Reset Gyro -> back button
-        *   Enable/Disable Field Centric -> start button
         */ 
 
         CommandScheduler.getInstance().reset();
         CommandScheduler.getInstance().cancelAll();
 
-        RunCommand defaultDriveCommand = new RunCommand(() -> driveSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getLeftX(), driverGamepad.getRightX()));
+        RunCommand defaultDriveCommand = new RunCommand(() -> driveSubsystem.drive(driverGamepad.getLeftY(), driverGamepad.getRightX()));
         defaultDriveCommand.addRequirements(driveSubsystem);
 
         driveSubsystem.setDefaultCommand(defaultDriveCommand);
@@ -52,12 +47,6 @@ public class Robot {
         Trigger speedVariationTrigger = new Trigger(() -> isPressed(driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)));
         speedVariationTrigger.whileActiveContinuous(() -> driveSubsystem.setSpeedMultiplier(Math.abs(driverGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - 1) * 0.4 + 0.2));
         speedVariationTrigger.whenInactive(() -> driveSubsystem.setSpeedMultiplier(1));
-
-        Trigger resetGyro = new Trigger(() -> driverGamepad.getButton(GamepadKeys.Button.BACK));
-        resetGyro.whenActive(() -> driveSubsystem.resetGyro());
-
-        Trigger setFieldCentric = new Trigger(() -> driverGamepad.getButton(GamepadKeys.Button.START));
-        setFieldCentric.whenActive(() -> driveSubsystem.setFieldCentricOnOff());
     }
 
     public void run() {
